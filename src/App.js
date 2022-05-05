@@ -68,10 +68,10 @@ const App = () => {
         towerOne.add(i)
       }
     }
-
     setTowerOne(towerOne);
     setTowerTwo(towerTwo);
     setTowerThree(towerThree);
+    setMoveCount(0)
   };
 
   const handleDrag = (e, tile, id) => {
@@ -116,7 +116,7 @@ const App = () => {
   return (
     <>
       <div className="container">
-        <GameOptionsComp disks={disks} setDisks={setDisks} />
+        <GameOptionsComp disks={disks} setDisks={setDisks} reset={reset}/>
         <div className="content">
           <TowerComp
             id={1}
@@ -143,5 +143,6 @@ const App = () => {
     </>
   );
 };
+
 
 export default App;
