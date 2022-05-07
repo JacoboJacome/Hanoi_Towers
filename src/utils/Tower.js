@@ -35,7 +35,12 @@ class Tower {
   //! este método será útil para el botón “resolver”. Este método deberá
   //! usar el método moveTopTo para mover todos los discos de la torre no.
   //! 1 hacía la torre no.3 de forma recursiva.
-  moveDisks() {}
+  moveDisks(disks, towerOne, towerTwo, towerThree) {
+    if (disks ===1){
+      towerOne.moveTopTo(towerThree)
+    }
+    return true
+  }
 }
 
 export default Tower;

@@ -1,6 +1,6 @@
 import { Row, Col, Button } from "react-bootstrap";
 
-const GameOptionsComp = ({ disks, setDisks, reset }) => {
+const GameOptionsComp = ({ disks, setDisks, reset, solve }) => {
   return (
     <Row>
       <Col>
@@ -28,7 +28,9 @@ const GameOptionsComp = ({ disks, setDisks, reset }) => {
         <Button variant="outline-secondary" onClick={() => reset()}>
           Reiniciar
         </Button>
-        <Button variant="outline-secondary">Resolver</Button>
+        <Button variant="outline-secondary" onClick={() => solve()}>
+          Resolver
+        </Button>
       </Col>
     </Row>
   );

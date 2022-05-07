@@ -63,15 +63,15 @@ const App = () => {
     towerOne = new Tower();
     towerTwo = new Tower();
     towerThree = new Tower();
-    if(disks > 0){
+    if (disks > 0) {
       for (let i = disks; i > 0; i--) {
-        towerOne.add(i)
+        towerOne.add(i);
       }
     }
     setTowerOne(towerOne);
     setTowerTwo(towerTwo);
     setTowerThree(towerThree);
-    setMoveCount(0)
+    setMoveCount(0);
   };
 
   const handleDrag = (e, tile, id) => {
@@ -103,7 +103,17 @@ const App = () => {
 
   //! esta función deberá resolver el juego, usando el método recursivo moveDisks
   //! desde la torre no. 1 teniendo como destino la torre no.3.
-  const solve = () => {
+  const solve = (e) => {
+
+    const goodMove = towerOne.moveDisks(disks, towerOne, towerTwo, towerThree); //Mover el disco desde la torre de origen al destino
+    if (goodMove) {
+      //*Si es un movimiento valido -> incrementar los movimientos
+
+      setMoveCount((prevState) => prevState + 1); //Actualizar los movimientos
+      setTiles(towerOne.disks.traverse()); //*Actualizar estado torreOne
+      setTilesTwo(towerTwo.disks.traverse()); //*Actualizar estado torreTwo
+      setTilesThree(towerThree.disks.traverse()); //*Actualizar estado torreThree
+    }
     //COMPLETAR
   };
   //!(true/false) será una variable que tendrá la condición necesaria para saber
@@ -116,7 +126,12 @@ const App = () => {
   return (
     <>
       <div className="container">
-        <GameOptionsComp disks={disks} setDisks={setDisks} reset={reset}/>
+        <GameOptionsComp
+          disks={disks}
+          setDisks={setDisks}
+          reset={reset}
+          solve={solve}
+        />
         <div className="content">
           <TowerComp
             id={1}
@@ -143,6 +158,5 @@ const App = () => {
     </>
   );
 };
-
 
 export default App;
