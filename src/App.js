@@ -90,7 +90,7 @@ const App = () => {
     let source = towers[dragTile.towerId].tower; //Torre de origen
     let destination = towers[dropColumn].tower; //Torre de destino
 
-    const goodMove = source.moveTopTo(destination); //Mover el disco desde la torre de origen al destino
+    const goodMove = source.moveTopTo(destination,setMoveCount, moveCount); //Mover el disco desde la torre de origen al destino
     if (goodMove) {
       //*Si es un movimiento valido -> incrementar los movimientos
 
@@ -103,13 +103,13 @@ const App = () => {
 
   //! esta función deberá resolver el juego, usando el método recursivo moveDisks
   //! desde la torre no. 1 teniendo como destino la torre no.3.
-  const solve = (e) => {
+  const solve = () => {
 
-    const goodMove = towerOne.moveDisks(disks, towerOne, towerTwo, towerThree); //Mover el disco desde la torre de origen al destino
+    const goodMove = towerOne.moveDisks(disks, towerThree, towerTwo); //Mover el disco desde la torre de origen al destino
     if (goodMove) {
       //*Si es un movimiento valido -> incrementar los movimientos
 
-      setMoveCount((prevState) => prevState + 1); //Actualizar los movimientos
+      setMoveCount((2**disks) - 1)
       setTiles(towerOne.disks.traverse()); //*Actualizar estado torreOne
       setTilesTwo(towerTwo.disks.traverse()); //*Actualizar estado torreTwo
       setTilesThree(towerThree.disks.traverse()); //*Actualizar estado torreThree

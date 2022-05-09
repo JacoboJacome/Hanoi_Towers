@@ -25,8 +25,8 @@ class Tower {
       this.disks.top.value < destination.disks.top.value
     ) {
       destination.disks.push(this.disks.top.value);
-      destination.length ++
-      this.length --
+      destination.length++;
+      this.length--;
       this.disks.pop();
       return true;
     }
@@ -35,11 +35,19 @@ class Tower {
   //! este método será útil para el botón “resolver”. Este método deberá
   //! usar el método moveTopTo para mover todos los discos de la torre no.
   //! 1 hacía la torre no.3 de forma recursiva.
-  moveDisks(disks, towerOne, towerTwo, towerThree) {
-    if (disks ===1){
-      towerOne.moveTopTo(towerThree)
+  moveDisks(disks, towerDestination, towerAux) {
+    if (disks === 0) {
+      return true;
     }
-    return true
+    if (disks === 1) {
+      this.moveTopTo(towerDestination);
+    }
+    if (disks >= 2) {
+      this.moveDisks(disks - 1, towerAux, towerDestination);
+      this.moveTopTo(towerDestination);
+      towerAux.moveDisks(disks - 1, towerDestination, this);
+    }
+    return true;
   }
 }
 
