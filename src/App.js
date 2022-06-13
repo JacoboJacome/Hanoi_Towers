@@ -4,7 +4,6 @@ import TowerComp from "./components/TowerComp";
 import WinMessageComp from "./components/WinMessageComp";
 import Tower from "./utils/Tower";
 import "./App.css";
-import helper from "./helpers/deepCopy";
 
 const App = () => {
   //*Contar el numero de movimientos
@@ -56,8 +55,6 @@ const App = () => {
     setTilesThree(towerThree.disks.traverse());
   }, [towerThree]);
 
-  //!esta función deberá reiniciar la torre no.1 del juego
-  //!con los discos seleccionados y tendrá que quitar todos los discos de la torre no.2 y no.3.
   const reset = () => {
     //COMPLETAR
     towerOne = new Tower();
@@ -75,7 +72,6 @@ const App = () => {
   };
 
   const handleDrag = (e, tile, id) => {
-    //*Funcion que se lanza cada vez que movemos un disco que se encuentra en la parte superior de una torre
     const dragTile = { tile, towerId: id };
     if (towers[id].tower.disks.top === dragTile.tile) {
       setDragTile(dragTile);
@@ -90,7 +86,7 @@ const App = () => {
     let source = towers[dragTile.towerId].tower; //Torre de origen
     let destination = towers[dropColumn].tower; //Torre de destino
 
-    const goodMove = source.moveTopTo(destination,setMoveCount, moveCount); //Mover el disco desde la torre de origen al destino
+    const goodMove = source.moveTopTo(destination, setMoveCount, moveCount); //Mover el disco desde la torre de origen al destino
     if (goodMove) {
       //*Si es un movimiento valido -> incrementar los movimientos
 
@@ -101,27 +97,25 @@ const App = () => {
     }
   };
 
-  //! esta función deberá resolver el juego, usando el método recursivo moveDisks
-  //! desde la torre no. 1 teniendo como destino la torre no.3.
   const solve = () => {
+    towerOne.setTower = setTowerOne.bind(setTowerOne);
+    towerTwo.setTower = setTowerTwo.bind(setTowerTwo);
+    towerThree.setTower = setTowerThree.bind(setTowerThree);
 
-    const goodMove = towerOne.moveDisks(disks, towerThree, towerTwo); //Mover el disco desde la torre de origen al destino
-    if (goodMove) {
-      //*Si es un movimiento valido -> incrementar los movimientos
-
-      setMoveCount((2**disks) - 1)
-      setTiles(towerOne.disks.traverse()); //*Actualizar estado torreOne
-      setTilesTwo(towerTwo.disks.traverse()); //*Actualizar estado torreTwo
-      setTilesThree(towerThree.disks.traverse()); //*Actualizar estado torreThree
-    }
-    //COMPLETAR
+    const generator = towerOne.moveDisks(disks, towerThree, towerTwo);
+    (async () => {
+      for (let n of generator) {
+        setMoveCount((prevState) => (prevState += 1));
+        await new Promise((resolve) => {
+          setTimeout(() => {
+            resolve();
+            console.log(n);
+          }, 700);
+        });
+      }
+    })();
   };
-  //!(true/false) será una variable que tendrá la condición necesaria para saber
-  //! en que momento se gana en el juego, esta variable almacenará true en caso
-  //! de que se haya pasado todos los discos de la torre no.1 a la torre no.
-  //!3 y false si el caso anterior no ha ocurrido.
-  const winCondition =
-    towerOne.length === 0 && towerTwo.length === 0 ? true : false; //COMPLETAR
+  const winCondition = tiles.length === 0 && tilesTwo.length === 0; //COMPLETAR
 
   return (
     <>

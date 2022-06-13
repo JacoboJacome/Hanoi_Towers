@@ -1,4 +1,5 @@
 import Stack from "./Stack";
+import deepCopy from "../helpers/deepCopy";
 
 class Tower {
   constructor(maxLength) {
@@ -6,46 +7,34 @@ class Tower {
     this.length = 0;
     this.disks = new Stack();
   }
-  //! servirá para agregar un disco a la torre → (un nuevo nodo a la pila)
-  //! pero debes de tener en cuenta la siguiente regla “Un disco no puede
-  //! mover encima de un disco más pequeño”
   add(value) {
     this.disks.push(value);
     this.length++;
     return this;
   }
 
-  //!deberá de mover el disco que se encuentra en la cima de la torre actual
-  //!(this) hacía la torre de destino (towerDestination) para esto deberás de
-  //!comprobar que pueda moverse hacía la torre de destino y después quitar el
-  //! disco de la torre de origen.
   moveTopTo(destination) {
-    if (
-      destination.disks.top === null ||
-      this.disks.top.value < destination.disks.top.value
-    ) {
-      destination.disks.push(this.disks.top.value);
-      destination.length++;
-      this.length--;
+    if (destination.add(this.disks.top.value)) {
       this.disks.pop();
-      return true;
+      destination.setTower(deepCopy(destination));
+      this.setTower(deepCopy(this));
+      return this;
+    } else {
+      return false;
     }
   }
-  //! será el método recursivo que resolverá el juego de la torre de Hanoi,
-  //! este método será útil para el botón “resolver”. Este método deberá
-  //! usar el método moveTopTo para mover todos los discos de la torre no.
-  //! 1 hacía la torre no.3 de forma recursiva.
-  moveDisks(disks, towerDestination, towerAux) {
+
+  *moveDisks(disks, towerDestination, towerAux) {
     if (disks === 0) {
       return true;
     }
     if (disks === 1) {
-      this.moveTopTo(towerDestination);
+      yield this.moveTopTo(towerDestination);
     }
     if (disks >= 2) {
-      this.moveDisks(disks - 1, towerAux, towerDestination);
-      this.moveTopTo(towerDestination);
-      towerAux.moveDisks(disks - 1, towerDestination, this);
+      yield* this.moveDisks(disks - 1, towerAux, towerDestination);
+      yield this.moveTopTo(towerDestination);
+      yield* towerAux.moveDisks(disks - 1, towerDestination, this);
     }
     return true;
   }
