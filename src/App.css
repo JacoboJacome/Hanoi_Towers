@@ -13,7 +13,6 @@
 
 .column-container {
   align-items: flex-end;
-  border: 1px solid grey;
   height: 80vh;
   position: relative;
   width: 30%;
@@ -23,7 +22,7 @@
   background-color: #2aa575;
   width: 4%;
   height: 100%;
-  border: 1px solid grey;
+  border: 1px solid #000;
   position: absolute;
   left: 48%;
   z-index: -1;

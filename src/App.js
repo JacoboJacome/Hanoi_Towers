@@ -109,7 +109,6 @@ const App = () => {
         await new Promise((resolve) => {
           setTimeout(() => {
             resolve();
-            console.log(n);
           }, 700);
         });
       }
